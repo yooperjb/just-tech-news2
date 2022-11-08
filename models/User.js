@@ -1,5 +1,6 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/connection');
+const bcrypt = require('bcrypt');
 
 
 // create the User Model
@@ -8,7 +9,6 @@ class User extends Model {}
 // initialize table columns and configuration in User Class
 User.init(
     {
-        // table column definitions go here
         // define an id column
         id: {
             // use the special Sequelize DataTypes object provide what type of data it is   
@@ -44,9 +44,23 @@ User.init(
                 // this means the password must be at least four characters long
                 len: [4]
             }
-        }
+        },
+        
     },
     {
+        // sequelize hooks (lifecycle events) are called before and after calls in sequelize
+        hooks: {
+            // set up beforeCreate lifecycle "hook" functionality (when new User is created)
+            async beforeCreate(newUserData) {
+                newUserData.password = await bcrypt.hash(newUserData.password, 10);
+                return newUserData;
+            },
+            // set up beforeUpdate lifecycle "hook" (when User password is updated)
+            async beforeUpdate(updatedUserData) {
+                updatedUserData.password = await bcrypt.hash(updatedUserData.password, 10);
+                return updatedUserData;
+            }
+        },
         // TABLE CONFIGURATION OPTIONS GO HERE
 
         // pass in our imported sequelize connection (the direct connection to our database)
