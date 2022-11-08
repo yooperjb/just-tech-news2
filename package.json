@@ -1,0 +1,31 @@
+{
+  "name": "just-tech-news2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "dev": "nodemon"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yooperjb/just-tech-news2.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yooperjb/just-tech-news2/issues"
+  },
+  "homepage": "https://github.com/yooperjb/just-tech-news2#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mysql2": "^3.0.0-rc.1",
+    "sequelize": "^6.25.4"
+  }
+}
