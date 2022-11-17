@@ -57,24 +57,34 @@ router.get( '/:id', (req, res)=> {
         })
 });
 
-// POST /api/users
+// POST /api/users (create a new user)
 router.post( '/', (req, res)=> {
     // expects {username, email, password}
     User.create({
         username: req.body.username,
         email: req.body.email,
         password: req.body.password
-    })
-        .then(dbUserData => res.json(dbUserData))
+    })  
+        // Save the user data to session
+        .then(dbUserData => {
+            req.session.save(() => {
+                req.session.user_id = dbUserData.id;
+                req.session.username = dbUserData.username;
+                req.session.loggedIn = true;
+
+                res.json(dbUserData);
+            });
+        })
         .catch(err => {
             console.log(err);
             res.status(500).json(err);
         });
 });
 
-// login route /api/users/login
+// login route /api/users/login (user login)
 router.post('/login', (req, res) => {
     // expects {email, password}
+    console.log('email', req.body.email);
     User.findOne({
         where: {
             email: req.body.email
@@ -92,8 +102,30 @@ router.post('/login', (req, res) => {
             res.status(400).json({ message: 'Incorrect password!' });
             return;
         }
-        res.json({ user: dbUserData, message: 'You are now logged in!' });
+
+        // save user data to session
+        req.session.save(() => {
+            // declare session variables
+            // i believe these are written to sessions table in db - session data is NOT saved in the cookie
+            req.session.user_id = dbUserData.id;
+            req.session.username = dbUserData.username;
+            req.session.loggedIn = true;
+
+            res.json({ user: dbUserData, message: 'You are now logged in!' });
+        }) 
     });
+});
+
+// logout route /api/users/logout (destroys session variables)
+router.post('/logout', (req, res) => {
+    if (req.session.loggedIn) {
+        req.session.destroy(() => {
+            res.status(204).end();
+        });
+    }
+    else {
+        res.status(404).end();
+    }
 });
 
 // PUT /api/users/1
