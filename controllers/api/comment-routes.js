@@ -12,16 +12,20 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res) => {
+    // check if session exists
+    if (req.session) {
+    
     Comment.create({
         comment_text: req.body.comment_text,
-        user_id: req.body.user_id,
-        post_id: req.body.post_id
+        post_id: req.body.post_id,
+        user_id: req.session.user_id // use id from session
     })
         .then(dbCommentData => res.json(dbCommentData))
         .catch(err => {
             console.log(err);
             res.status(400).json(err);
         })
+    }
 });
 
 router.delete('/:id', (req, res) => {
