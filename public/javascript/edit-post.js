@@ -1,7 +1,7 @@
 async function editFormHandler(event) {
     event.preventDefault();
     
-    // get post id
+    // get window location and post id
     const location = window.location.toString().split('/');
     const id = location[location.length -1];
 
