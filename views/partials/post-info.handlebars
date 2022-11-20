@@ -6,6 +6,7 @@
     <div class="meta">
         {{vote_count}} {{format_plural "point" vote_count}} by {{user.username}} on {{format_date created_at}}
         |
-        <a href="/post/{{id}}">{{comments.length}} {{format_plural "comment" comment_count}}</a>
+        {{!-- display comment count and link to post page --}}
+        <a href="/post/{{id}}">{{comments.length}} {{format_plural "comment" comments.length}}</a>
     </div>
 </article>
