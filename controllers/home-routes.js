@@ -31,7 +31,6 @@ router.get('/', (req, res) => {
     })
         .then(dbPostData => {
             // pass post object into the homepage template and serialize using plain:true
-            
             const posts = dbPostData.map(post => post.get({ plain: true }));
             console.log("posts",posts);
             res.render('homepage', { 
